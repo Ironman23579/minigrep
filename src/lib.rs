@@ -1,6 +1,5 @@
 use std::fs;
 use std::error::Error;
-use colored::Colorize;
 
 pub struct Config {
     pub query: String,
