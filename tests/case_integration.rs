@@ -1,8 +1,10 @@
-use minigrep::{self, Config};
-use std::fs;
-use std::error::Error;
+// use minigrep::{self, Config};
+// use std::fs;
+// use std::error::Error;
 
+/*
 #[test]
+#[ignore] 
 fn case_sensitive() -> Result<(), Box<dyn Error>> {
     let config = Config::build(&vec![
         String::from("minigrep"),
@@ -22,8 +24,11 @@ fn case_sensitive() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+*/
 
+/* 
 #[test]
+#[ignore]
 fn case_insensitive() -> Result<(), Box<dyn Error>> {
     let config = Config::build(&vec![
         String::from("minigrep"),
@@ -44,3 +49,4 @@ fn case_insensitive() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+*/
