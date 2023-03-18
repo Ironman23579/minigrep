@@ -10,8 +10,10 @@ minigrep needs two arguments: a string to search for, and a text file to search 
 
 eg.
 
-minigrep |text to search for| |file to search in|
+minigrep "text to search for" file
 
 if you want your search to be case sensitive, you can add a -c at the end, like this:
 
-minigrep to poem.txt -c
+minigrep "to" poem.txt -c
+
+if your query is only one word, minigrep accepts a query with no quotes, but quotes must be used if your query consists of whitespace.
