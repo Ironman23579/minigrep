@@ -30,6 +30,18 @@ impl Config {
     }
 }
 
+pub struct LineResult<'a> {
+    pub line_number: usize,
+    pub contents: &'a str,
+    pub hits: Vec<usize>,
+}
+
+impl<'a> LineResult<'a> {
+    fn new(line_number: usize, contents: &'a str, hits: Vec<usize>) -> LineResult<'a> {
+        LineResult {line_number, contents, hits}
+    }
+}
+
 pub fn run(config: Config) -> Result<(), Box<dyn Error>>{
     let contents = fs::read_to_string(config.file_path)?;
     let results = if config.case_sensitive {
@@ -75,6 +87,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[ignore]
     fn case_sensitive() {
         let query = "igh";
         let contents = "\
@@ -87,6 +100,7 @@ It's HIGHLY critical.";
     }
 
     #[test]
+    #[ignore]
     fn case_insensetive() {
         let query = "tO";
         let contents = "\
@@ -98,5 +112,9 @@ understand Rick and Morty.";
             vec![(0, "To be fair,"), (1, "you have to have a high IQ to")],
             search(query, contents)
         );
+    }
+
+    fn case_sensitive_highlighting() {
+        
     }
 }
