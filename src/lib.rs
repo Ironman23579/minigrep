@@ -16,6 +16,12 @@ impl Config {
         let query = args[1].clone();
         let file_path = args[2].clone();
 
+        let mut q_chars = query.chars();
+
+        if q_chars.next().unwrap() == '\"' && q_chars.rev().next().unwrap() == '\"' {
+            let query = &query[1..query.len()-1].to_string();
+        }
+
         let case_sensitive = if args.len() > 3 {
             &args[3] == "-c"   
         } else {
