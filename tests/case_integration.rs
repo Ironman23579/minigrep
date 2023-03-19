@@ -50,9 +50,10 @@ fn case_insensitive() -> Result<(), Box<dyn Error>> {
 
 #[test]
 fn multiword_query_case_sensitive() -> Result<(), Box<dyn Error>> {
+    
     let config = Config::build(&vec![
         String::from("minigrep"),
-        String::from("\"to be\""),
+        String::from("to be"),
         String::from("poem.txt"),
         String::from("-c")]).unwrap_or_else(|err| {
             panic!("problem parsing arguments: {err}");
@@ -71,7 +72,7 @@ fn multiword_query_case_sensitive() -> Result<(), Box<dyn Error>> {
 fn multiword_query_case_insensitive() -> Result<(), Box<dyn Error>> {
     let config = Config::build(&vec![
         String::from("minigrep"),
-        String::from("\"tO tEll\""),
+        String::from("tO tEll"),
         String::from("poem.txt")]).unwrap_or_else(|err| {
             panic!("problem parsing arguments: {err}");
         });
