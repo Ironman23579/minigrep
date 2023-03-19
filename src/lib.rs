@@ -52,6 +52,10 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>>{
         println!("\"{}\" {}", line.1, format!("{}{}", "- line ".yellow(), (line.0 + 1).to_string().yellow()));
     }
 
+    let match_count = match_count(&config.query, &contents, config.case_sensitive);
+
+    println!("\n{}{}{}", "Found query ".green(), match_count.to_string().green(), " times in file".green());
+
     Ok(())
 }
 
@@ -77,8 +81,19 @@ pub fn highlight_keywords(contents: &str, query: &str) -> String {
     formatted_string.push_str(&contents[start..]);
 
     formatted_string
+}
 
-} 
+fn match_count(query: &str, contents: &str, case_sensitive: bool) -> usize {
+    let pattern = if case_sensitive {
+        String::from(query)
+    } else {
+        format!("(?i){}", query)
+    };
+
+    let regex = Regex::new(&pattern).unwrap();
+
+    regex.find_iter(contents).count()
+}
 
 pub fn search_case_sensitive(query: &str, contents: &str) -> Vec<(usize, String)> {
     let mut results = Vec::new();
