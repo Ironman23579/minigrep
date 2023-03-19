@@ -79,9 +79,9 @@ fn multiword_query_case_insensitive() -> Result<(), Box<dyn Error>> {
 
     let contents = fs::read_to_string(config.file_path)?;
 
-    let results = minigrep::search_case_sensitive(&config.query, &contents);
+    let results = minigrep::search(&config.query, &contents);
 
-    assert_eq!(results, vec![(5, format!("{} your name the livelong day", "To tell".red()))]);
+    assert_eq!(results, vec![(7, format!("{} your name the livelong day", "To tell".red()))]);
 
     Ok(())
 }
