@@ -1,9 +1,9 @@
-use std::fs;
-use std::error::Error;
+pub use std::fs;
+pub use std::error::Error;
 
-use colored::Colorize;
+pub use colored::Colorize;
 
-use regex::Regex;
+pub use regex::Regex;
 
 pub struct Config {
     pub query: String,
