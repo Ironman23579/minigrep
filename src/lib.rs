@@ -21,7 +21,7 @@ impl Config {
         let mut q_chars = query.chars();
 
         if q_chars.next().unwrap() == '\"' && q_chars.rev().next().unwrap() == '\"' {
-            let query = &query[1..query.len()-1].to_string();
+            let _query = &query[1..query.len()-1].to_string();
         }
 
         let case_sensitive = if args.len() > 3 {
@@ -108,33 +108,23 @@ mod tests {
     use super::*;
 
     #[test]
-    fn case_sensitive() {
-        let query = "igh";
-        let contents = "\
-To be fair,
-you have to have a high IQ to
-understand Rick and Morty.
-It's HIGHLY critical.";
-
-        assert_eq!(vec![(1, String::from("you have to have a high IQ to"))], search_case_sensitive(query, contents));
-    }
-
-    #[test]
     fn case_insensetive() {
-        let query = "tO";
+        let query = "loL";
         let contents = "\
-To be fair,
-you have to have a high IQ to
-understand Rick and Morty.";
+Lol, lOl.
+lOLol, and then finally, loL.
+Just to be safe, a line with none,
+and finishing it off with a LOlolol.";
 
         assert_eq!(
-            vec![(0, String::from("To be fair,")), (1, String::from("you have to have a high IQ to"))],
-            search(query, contents)
-        );
+            vec![(0, format!("{}, {}.", "Lol".red(), "loL".red())),
+                (1, format!("{}ol, and then finally, {}.", "lOL".red(), "loL".red())),
+                (3, format!("and finishing it off with a {}o{}.", "LOl".red(), "lol".red()))],
+            search_case_sensitive(query, contents))
     }
 
     #[test]
-    fn case_sensitive_highlighting() {
+    fn case_sensitive() {
         let query = "lol";
         let contents = "\
 Lol, lol.
@@ -146,7 +136,6 @@ and finishing it off with a lololol.";
             vec![(0, format!("Lol, {}.", "lol".red())),
                 (1, format!("{}ol, and then finally, {}.", "lol".red(), "lol".red())),
                 (3, format!("and finishing it off with a {}o{}.", "lol".red(), "lol".red()))],
-            search_case_sensitive(query, contents)
-        )
+            search_case_sensitive(query, contents))
     }
 }
