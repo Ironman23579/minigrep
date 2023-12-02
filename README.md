@@ -6,14 +6,16 @@ as a starting point, but have also added a few unique features.
 
 BASIC USAGE:
 
-minigrep needs two arguments: a string to search for, and a text file to search in.
+minigrep [OPTIONS] <query> <file path>
 
-eg.
+By default, minigrep is configured to work through piping, eg:
 
-minigrep "text to search for" file
+echo "Hello World!" | minigrep o
 
-if you want your search to be case sensitive, you can add a -c at the end, like this:
+but it can also read from a file.
 
-minigrep "to" poem.txt -c
+Options:
 
-if your query is only one word, minigrep accepts a query with no quotes, but quotes must be used if your query consists of whitespace.
+-c: configures the search to be case sensitive.
+
+-f: configures minigrep to search from a file.
