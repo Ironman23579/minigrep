@@ -1,47 +1,69 @@
 pub use std::fs;
 pub use std::error::Error;
-
+pub use std::env;
+pub use std::iter;
+pub use std::io::{self, BufRead};
 pub use colored::Colorize;
 
 pub use regex::Regex;
 
 pub struct Config {
     pub query: String,
+    pub use_file: bool,
     pub file_path: String,
     pub case_sensitive: bool,
 }
 
 impl Config {
-    pub fn build(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("minigrep requires two arguments to function.");
+    pub fn build(args_raw: env::Args) -> Result<Config, &'static str> {
+
+        let args = args_raw.skip(1);
+
+        let mut use_file = false;
+        let mut case_sensitive = false;
+        let mut query = "".to_string();
+        let mut file_path = "".to_string();
+
+        for arg in args {
+            match arg.as_str() {
+                "-c" => case_sensitive = true,
+                "-f" => use_file = true,
+                _ => if let "" = query.as_str() {
+                    query = arg;
+                } else if use_file {
+                    if let "" = file_path.as_str() {
+                        file_path = arg;
+                    } else {
+                        return Err("Too many arguments")
+                    }
+                }
+            }
         }
-
-        let query = args[1].clone();
-        let file_path = args[2].clone();
-
-        let mut q_chars = query.chars();
-
-        if q_chars.next().unwrap() == '\"' && q_chars.rev().next().unwrap() == '\"' {
-            let _query = &query[1..query.len()-1].to_string();
-        }
-
-        let case_sensitive = if args.len() > 3 {
-            &args[3] == "-c"   
-        } else {
-            false
-        };
 
         Ok(Config{
-            query,
-            file_path,
-            case_sensitive,
+            query: query,
+            use_file: use_file,
+            file_path: file_path,
+            case_sensitive: case_sensitive,
         })
+
     }
 }
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>>{
-    let contents = fs::read_to_string(config.file_path)?;
+    let contents = if config.use_file {
+        fs::read_to_string(config.file_path)?
+    } else {
+        let stdin = io::stdin();
+        let handle = stdin.lock();
+        let mut buffer = String::new();
+
+        for line in handle.lines() {
+            buffer.push_str(&line.unwrap());
+            buffer.push_str("\n")
+        }
+        buffer
+    };
     let results = if config.case_sensitive {
         search_case_sensitive(&config.query, &contents)
     } else {
@@ -111,7 +133,7 @@ pub fn search_case_sensitive(query: &str, contents: &str) -> Vec<(usize, String)
                     formatted_string = format!("{}{}", formatted_string, query.red());
                 }
             }
-            
+
             results.push((line.0, formatted_string));
 
         }
